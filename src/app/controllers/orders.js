@@ -2,15 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 // Importing Models
-// const Product = mongoose.model('Product');
-// const Order = mongoose.model('Order');
+const Product = require('../models/Product.js')
+const Order = require('../models/Order.js')
 
 module.exports = function(app){
 	app.use('/api/v1', router);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Get Orders
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
   router.get('/order', (req, res) => {    
     Order.find()
       .populate('product_id') 
@@ -19,9 +17,7 @@ module.exports = function(app){
       });
     });
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Get Products
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
   router.get('/products', (req, res) => {
     console.log("Getting all products! 🙌")
     Product.find()
@@ -39,9 +35,6 @@ module.exports = function(app){
 
   })
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Create New Order
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   router.post('/order', (req, res) => {
     // console.log('Create NEW Order:', req.body);
     const newOrder = new Order(req.body)
@@ -93,10 +86,13 @@ module.exports = function(app){
   // Deleting by the orderID.
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   router.delete('/order/:orderID', (req, res) => {
-    Order.remove({_id: req.params.orderID}, (err) => {
+    const id = req.params.orderID;
+    Order.delete(id, (err) => {
       console.log("DELETE THIS NOW!!!! ", req.params.orderID )
-      res.sendStatus(200);
-    })
+      res.sendStatus(500);
+    }), (successData) => {
+      res.status(200).json(successData)
+    }
   })
 
   return router;

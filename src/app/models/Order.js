@@ -17,3 +17,9 @@ exports.find = (err, success) => {
       }],
    }).then(success).catch(err)
 }
+
+exports.delete =  (id, err, success) => {
+   db.order.destroy({
+      where: id
+   }).then(success).catch(err)
+}
