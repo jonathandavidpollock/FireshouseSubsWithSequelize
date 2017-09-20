@@ -10,29 +10,29 @@ module.exports = function(app){
 
 
   router.get('/order', (req, res) => {    
-    Order.find()
-      .populate('product_id') 
-      .exec(function(err, product){
-        res.json(product)
-      });
+      Order.findAll(err => {
+        res.status(500).json(err)
+      }), success => {
+        res.status(200).json(success)
+      }
     });
 
 
   router.get('/products', (req, res) => {
     console.log("Getting all products! 🙌")
-    Product.find()
-    .exec((err, products) => {
-      res.json(products)
-    })
+    Product.findAll(err => {
+      res.status(500).json(err)
+    }), success => {
+      res.status(200).json(success)
+    }
   })
 
   router.get('/order/:orderID', (req, res) => {
-    // console.log(req.params.orderID)
-    Order.findById(req.params.orderID, (err, docs) => {
-      console.log("DOCS REURNED--- ",docs)
-      res.json(docs)
-    }).populate('product_id') 
-
+    Order.find(req.params.orderID, err => {
+      res.status(500).json(err)
+    }, success => {
+      res.status(200).json(success)
+    })
   })
 
   router.post('/order', (req, res) => {
@@ -55,9 +55,6 @@ module.exports = function(app){
     })
   })
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Getting an order by Id and updating it.
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   router.put('/order/:orderID', (req, res) => {
     console.log("Update Order now: ", req.body )
     let arryTotal = []
@@ -82,9 +79,6 @@ module.exports = function(app){
     })    
   })
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Deleting by the orderID.
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   router.delete('/order/:orderID', (req, res) => {
     const id = req.params.orderID;
     Order.delete(id, (err) => {

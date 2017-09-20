@@ -8,7 +8,7 @@ exports.findAll = (err, success) => {
    db.order.findAll().then(success).catch(err)
 }
 
-exports.find = (err, success) => {
+exports.find = (id, err, success) => {
    db.order.find({
       where:payload,
       include: [{
