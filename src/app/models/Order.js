@@ -1,17 +1,19 @@
-// var mongoose = require('mongoose');
+const db = require('../db.js')
 
-// var orderSchema = mongoose.Schema({
-//   product_id: [{type:  mongoose.Schema.Types.ObjectId, ref: 'Product'}],
-//   total_price: {type: Number, default: 0}
-// })
+exports.create = (payload, success, err) => {
+   db.order.create(payload).then(success).catch(err)
+}
 
+exports.findAll = (err, success) => {
+   db.order.findAll().then(success).catch(err)
+}
 
-// orderSchema.methods.getTotalPrice = function(prices){
-
-//   let total = 0      
-//   prices.length !== 0 ? prices.forEach(price => total += price ) : 0   
-//   return total
-
-// }
-
-// module.exports = mongoose.model('Order', orderSchema)
+exports.find = (err, success) => {
+   db.order.find({
+      where:payload,
+      include: [{
+         all:true,
+         nested: true
+      }],
+   }).then(success).catch(err)
+}
